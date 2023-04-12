@@ -1,0 +1,7 @@
+html {
+    --menu-bg-color: #ffffff;
+}
+
+html.dark {
+    --menu-bg-color: #001529;
+}
