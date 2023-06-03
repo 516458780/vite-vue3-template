@@ -1,0 +1,10 @@
+
+//750设计稿，px转换为rem
+@function px750rem($val) {
+  @return calc($val / 75) + rem;
+}
+
+//375设计稿，px转换为rem
+@function px375rem($val) {
+  @return calc($val / 37.5) + rem;
+}

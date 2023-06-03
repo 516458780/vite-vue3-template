@@ -1,27 +1,27 @@
+import pinia from './index.js'
 import { defineStore } from 'pinia'
 
-export default defineStore('main', {
+const store = defineStore('main', {
   state: () => ({
     token: '',
-    loadingNum: 0
+    isLoading: false
   }),
   getters: {
-    isLoading (state) {
-      return state.loadingNum > 0
-    }
   },
   actions: {
     setToken (data) {
       this.token = data || ''
     },
-    removeToken () {
+    removeToken (state) {
       this.token = ''
     },
-    showLoading () {
-      this.loadingNum++
+    showLoading (data) {
+      this.isLoading = true
     },
-    hideLoading () {
-      this.loadingNum--
+    hideLoading (data) {
+      this.isLoading = false
     }
-  }
+  },
 })
+
+export default store(pinia)

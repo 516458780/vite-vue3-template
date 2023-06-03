@@ -1,19 +1,42 @@
 <template>
   <div class="page">
-    login
+    <van-field class="input-line" v-model="mobile" placeholder="请输入手机号" />
+    <van-field
+        class="input-line"
+        v-model="sms"
+        center
+        clearable
+        placeholder="请输入验证码"
+    >
+      <template #button>
+        <span v-show="!waitSecond" @click="sendSms">获取验证码</span>
+        <span v-show="waitSecond">{{ waitSecond }}s</span>
+      </template>
+    </van-field>
+    <van-button round block type="primary">登录</van-button>
+    <div class="agreement">
+      <tick-button v-model="checked" :size="$helper.px750rem(28)" :tick-size="$helper.px750rem(24)"></tick-button>
+      <span>同意并注册</span>
+    </div>
+    {{ $store.main.token }}
   </div>
 </template>
 
 <script>
 import { ref } from 'vue'
-import Request from '@/request'
+import { showNotify } from 'vant'
+import TickButton from '@/components/TickButton.vue'
+import Api from '@/api'
 
-const eachSecond = 0
+const eachSecond = 2
 export default {
+  components: {
+    TickButton
+  },
   setup () {
     return {
-      mobile: ref('15099999999'),
-      smsCode: ref(''),
+      mobile: ref(''),
+      sms: ref(''),
 
       waitSecond: ref(0),
       secondInterval: ref(null),
@@ -21,29 +44,19 @@ export default {
       checked: ref(true)
     }
   },
-  computed: {
-    canSubmit () {
-      const that = this
-
-      if (!that.$helper.isTrueMobileNumber(that.mobile)) {
-        return false
-      }
-
-      if (that.smsCode.length < 4) {
-        return false
-      }
-
-      return true
-    }
-  },
   mounted () {
+    const that = this
+    console.log(that)
+    setTimeout(() => {
+      that.$store.main.setToken('2222222')
+    }, 3000)
   },
   methods: {
     sendSms () {
       const that = this
 
       if (!that.$helper.isTrueMobileNumber(that.mobile)) {
-        console.log('手机号错误')
+        showNotify({ type: 'danger', message: '手机号错误' })
         return
       }
 
@@ -63,46 +76,12 @@ export default {
         mobile: that.mobile,
         vk: 'simpleCode'
       }
-      Request.user.sendSms({ data })
+      Api.user.sendSms(data)
         .then(() => {
           console.log('1111')
         })
         .catch((e) => {
           console.log('222')
-        })
-    },
-    verifyCode () {
-      const that = this
-
-      if (!that.$helper.isTrueMobileNumber(that.mobile)) {
-        console.log('手机号错误')
-        return
-      }
-
-      if (that.smsCode.length < 4) {
-        console.log('请输入四位验证码')
-        return
-      }
-
-      that.$store.main.showLoading()
-
-      // 发送
-      const data = {
-        mobile: that.mobile,
-        verifyKey: 'simpleCode',
-        code: that.smsCode
-      }
-      Request.user.verifyCode({ data })
-        .then(() => {
-          console.log('1111')
-        })
-        .catch((e) => {
-          console.log('222')
-        })
-        .finally(() => {
-          setTimeout(() => {
-            that.$store.main.hideLoading()
-          }, 500)
         })
     }
   }
@@ -123,13 +102,8 @@ export default {
   margin-bottom: 30px;
 }
 .agreement {
-  padding-top: 15px;
   display: flex;
   align-items: flex-start;
-
-  .tick-button {
-    margin-right: 10px;
-  }
 
   span {
     font-size: px750rem(12);

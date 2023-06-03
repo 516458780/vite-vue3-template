@@ -1,20 +1,20 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
-import { storeModel, store } from '@/store/index.js'
+import pinia from '@/store/index.js'
+
 import helper from './utils/helper.js'
 
 import Vant from './vant.js'
+import store from '@/store/module.js'
 
 const app = createApp(App)
 
-app.use(createPinia())
+app.use(pinia)
 app.use(router)
 Vant(app)
 
 app.config.globalProperties.$helper = helper
 app.config.globalProperties.$store = store
-app.config.globalProperties.$storeModel = storeModel
 
 app.mount('#app')

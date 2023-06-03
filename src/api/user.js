@@ -1,24 +1,27 @@
 import axios from '@/utils/axios.js'
 import GlobalConfig from '@/config'
 
-export const sendSms = (options = {}) => {
+export const sendSms = (data) => {
   console.log(111)
   return axios({
     method: 'post',
     url: GlobalConfig.api.simpleSendVerifyCode,
-    ...options
+    data
   })
 }
 
-export const verifyCode = (options = {}) => {
+export const userLogin = () => {
   return axios({
     method: 'post',
-    url: GlobalConfig.api.simpleVerifyCode,
-    ...options
+    url: '/login',
+    data: {
+      username: '',
+      password: ''
+    }
   })
 }
 
 export default {
   sendSms,
-  verifyCode
+  userLogin
 }

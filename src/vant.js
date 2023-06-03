@@ -1,5 +1,5 @@
 
-import { Button, Field, CellGroup, RadioGroup, Radio, Icon, Overlay } from 'vant'
+import { Button, Field, CellGroup, RadioGroup, Radio, Icon } from 'vant'
 import 'vant/lib/index.css'
 
 const initVant = (app) => {
@@ -10,7 +10,6 @@ const initVant = (app) => {
     .use(RadioGroup)
     .use(Radio)
     .use(Icon)
-    .use(Overlay)
 }
 
 export default initVant
